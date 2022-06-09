@@ -9,17 +9,14 @@ using System.Text;
 using Microsoft.Win32;
 
 // Custom
-using Veylib;
 using Veylib.CLIUI;
-using Veylib.Authentication;
-
-// Nuget
-using Newtonsoft.Json;
-using System.Reflection;
 
 /*
  * Nuking com is shit
  *  - verlox 2.14.2022
+ *  
+ * idk why but i get bored and just decide to modify the dumbest shit on this every once in a while
+ *  - verlox 6.9.2022
  * */
 
 namespace LithiumNukerV2
