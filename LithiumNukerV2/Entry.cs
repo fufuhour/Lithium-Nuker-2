@@ -94,7 +94,6 @@ namespace LithiumNukerV2
                     Text = "fuck skids | verlox & russian heavy on top"
                 },
                 ColorRotation = 260,
-
                 LogoString = Settings.Logo,
                 DebugMode = Settings.Debug,
                 Author = new Core.StartupAuthorProperties {
