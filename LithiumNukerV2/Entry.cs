@@ -115,30 +115,6 @@ namespace LithiumNukerV2
             // Parse the args
             parseArgs(args);
 
-            /*
-             * Fuck version shit
-             * 
-            // Check version
-            var v = Vars.Get("loader_version", -1);
-
-            if (v.State == Vars.VarState.Success)
-            {
-                var version = Version.Parse(v.Value);
-                if (version > LithiumShared.GetVersion())
-                {
-                    core.WriteLine(new Core.MessageProperties { Label = new Core.MessagePropertyLabel { Text = "fail" } }, "This client is outdated, download a new client from the Discord, press any key to close");
-                    Console.ReadKey();
-                    return;
-                }
-            }
-            else
-            {
-                core.WriteLine(new Core.MessageProperties { Label = new Core.MessagePropertyLabel { Text = "fail" } }, "Failed to check version, press any key to close");
-                Console.ReadKey();
-                return;
-            }
-            */
-
             // Setup the stupid ass connection limits
             ServicePointManager.DefaultConnectionLimit = Settings.ConnectionLimit;
             ServicePointManager.Expect100Continue = false;
