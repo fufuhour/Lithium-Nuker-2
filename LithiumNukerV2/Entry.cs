@@ -83,26 +83,32 @@ namespace LithiumNukerV2
         static void Main(string[] args)
         {
             // No.
-            #if DEBUG
+#if DEBUG
             Settings.Debug = true;
-            #endif
+#endif
 
             #region Setting up the UI
-            var props = new Core.StartupProperties { 
+            var props = new Core.StartupProperties {
                 MOTD = new Core.StartupMOTDProperties
                 {
                     Text = "fuck skids | verlox & russian heavy on top"
-                }, 
-                ColorRotation = 260, 
+                },
+                ColorRotation = 260,
+
                 LogoString = Settings.Logo,
-                DebugMode = Settings.Debug, 
-                Author = new Core.StartupAuthorProperties { 
-                    Url = "verlox.cc & russianheavy.xyz", 
+                DebugMode = Settings.Debug,
+                Author = new Core.StartupAuthorProperties {
+                    Url = "verlox.cc & russianheavy.xyz",
                     Name = "verlox & russian heavy"
-                }, 
-                Title = new Core.StartupConsoleTitleProperties { 
+                },
+                Title = new Core.StartupConsoleTitleProperties {
                     Text = "Lithium Nuker V2"
-                } 
+                },
+                SplashScreen = new Core.StartupSpashScreenProperties
+                {
+                    AutoGenerate = true,
+                    DisplayProgressBar = true
+                }
             };
             core.Start(props);
             #endregion
