@@ -8,9 +8,10 @@ using System.Threading;
 using System.Linq;
 using System.Drawing;
 
-using LithiumNukerV2;
+
 using Newtonsoft.Json;
 using Veylib.ICLI;
+using Veylib;
 
 namespace LithiumNukerV2
 {
@@ -179,7 +180,7 @@ namespace LithiumNukerV2
 
             // Create a webhook for each channel
 
-            var loads = WorkController.Seperate(channels, threads);
+            var loads = WorkLoadController.Seperate(channels, threads);
 
             int loadsfin = 0;
             foreach (var load in loads)
@@ -208,7 +209,7 @@ namespace LithiumNukerV2
                 Thread.Sleep(50);
 
             // Create work loads
-            var whloads = WorkController.Seperate(webhooks, threads);
+            var whloads = WorkLoadController.Seperate(webhooks, threads);
             int finished = 0;
 
             // Create threads and run

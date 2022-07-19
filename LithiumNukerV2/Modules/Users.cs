@@ -10,8 +10,9 @@ using System.IO;
 using System.Diagnostics;
 
 // Custom
-using LithiumNukerV2;
+
 using Veylib.ICLI;
+using Veylib; 
 
 // Nuget
 using Newtonsoft.Json;
@@ -35,7 +36,7 @@ namespace LithiumNukerV2
             threads = threadCount;
         }
 
-        public dynamic GetUserInfo(object userId)
+        public static dynamic GetUserInfo(string token, object userId, bool silent = false)
         {
             var req = WebRequest.Create($"https://discord.com/api/v9/users/{userId}");
             req.Timeout = 5000;
@@ -54,7 +55,8 @@ namespace LithiumNukerV2
                 resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
             }
 
-            core.WriteLine(Color.Lime, $"Got information on {resp.id}");
+            if (!silent)    
+                core.WriteLine(Color.Lime, $"Got information on {resp.id}");
 
             return resp;
         }
@@ -73,7 +75,7 @@ namespace LithiumNukerV2
             else
                 getMembers();
 
-            whitelistedIds.Add((string)GetUserInfo("@me").id);
+            whitelistedIds.Add((string)GetUserInfo(token, "@me").id);
 
             core.WriteLine($"Banning ${members.Count} members");
             banMembers();
@@ -140,7 +142,7 @@ namespace LithiumNukerV2
             void banMembers()
             {
                 int finished = 0;
-                var allLoads = WorkController.Seperate(members, threads);
+                var allLoads = WorkLoadController.Seperate(members, threads);
                 foreach (var load in allLoads)
                 {
                     core.WriteLine($"Banning {load.Count} members in a load");
