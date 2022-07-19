@@ -9,7 +9,7 @@ using System.Text;
 using Microsoft.Win32;
 
 // Custom
-using Veylib.CLIUI;
+using Veylib.ICLI;
 
 /*
  * Nuking com is shit
@@ -79,33 +79,44 @@ namespace LithiumNukerV2
         // Entry point
         static void Main(string[] args)
         {
-            // No.
-#if DEBUG
-            Settings.Debug = true;
-#endif
-
             #region Setting up the UI
             var props = new Core.StartupProperties {
                 MOTD = new Core.StartupMOTDProperties
                 {
-                    Text = "fuck skids | verlox & russian heavy on top"
+                    Text = "fuck skids | verlox & russian heavy on top",
+                    DividerColor = Settings.Colors.Accent,
                 },
                 ColorRotation = 260,
-                LogoString = Settings.Logo,
+                LogoString = $"{Settings.Logo}\n{Core.Formatting.HorizontalRainbow(Core.Formatting.Center("made by verlox and russian heavy", 111), 180, 2)}",
+                //LogoString = $"{Settings.Logo}",
                 DebugMode = Settings.Debug,
-                Author = new Core.StartupAuthorProperties {
-                    Url = "verlox.cc & russianheavy.xyz",
-                    Name = "verlox & russian heavy"
-                },
+                //Author = new Core.StartupAuthorProperties {
+                //    Url = "verlox.cc & russianheavy.xyz",
+                //    Name = "verlox & russian heavy"
+                //},
                 Title = new Core.StartupConsoleTitleProperties {
                     Text = "Lithium Nuker V2"
                 },
                 SplashScreen = new Core.StartupSpashScreenProperties
                 {
                     AutoGenerate = true,
-                    DisplayProgressBar = true
+                    DisplayProgressBar = true,
+                    ProgressBarSettings = new ProgressBar.Settings
+                    {
+                        Style = new ProgressBar.Style
+                        {
+                            EdgeColor = Settings.Colors.Accent
+                        }
+                    }
                 }
             };
+
+            // No.
+            #if DEBUG
+                Settings.Debug = true;
+                props.SplashScreen = null;
+            #endif
+
             core.Start(props);
             #endregion
 
@@ -117,7 +128,7 @@ namespace LithiumNukerV2
             ServicePointManager.Expect100Continue = false;
 
             // Open options
-            Picker.Choose();
+             Picker.Choose();
         }
     }
 }
