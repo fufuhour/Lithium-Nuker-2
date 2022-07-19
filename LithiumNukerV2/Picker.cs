@@ -7,9 +7,11 @@ using System.IO;
 using System.Net;
 using System.Diagnostics;
 
+// Nuget
+using Newtonsoft.Json;
+
 // Custom
 using Veylib.ICLI;
-using LithiumCore;
 
 namespace LithiumNukerV2
 {
@@ -139,6 +141,31 @@ namespace LithiumNukerV2
 
             // Regex format for bot tokens
             var regex = new Regex(@"[\w-_]{24}.[\w-_]{6}.[\w-_]{27}");
+
+            // Find any stored tokens
+            if (File.Exists("config.json"))
+            {
+                try
+                {
+                    dynamic conf = JsonConvert.DeserializeObject(File.ReadAllText("config.json"));
+
+                    var menu = new SelectionMenu();
+
+                    foreach (var t in conf.tokens)
+                    {
+                        var inf = Users.GetUserInfo(t.ToString(), "@me", true);
+
+                        menu.AddOption($"{inf.id} - {inf.username}");
+                    }
+
+                    core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, "Select a token to use");
+                    menu.Activate();
+                } catch (Exception ex)
+                {
+                    Debug.Write(ex);
+                    core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Failed to import ", Color.Pink, "config.json");
+                }
+            }
 
             string token = Settings.Token;
 
