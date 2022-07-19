@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 // Custom
 using LithiumNukerV2;
-using Veylib.CLIUI;
+using Veylib.ICLI;
 
 // Nuget
 using Newtonsoft.Json;
