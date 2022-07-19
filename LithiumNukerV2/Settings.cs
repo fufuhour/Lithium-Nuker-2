@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Veylib.ICLI;
 
 // All of the settings can be changed from here
 
@@ -6,9 +7,21 @@ namespace LithiumNukerV2
 {
     public class Settings
     {
-        public static class Colors
+        public static class Style
         {
             public static readonly Color Accent = Color.FromArgb(146, 13, 255);
+            public static readonly SelectionMenu.Settings SelectionMenuStyle = new SelectionMenu.Settings
+            {
+                Style = new SelectionMenu.Style
+                {
+                    PreOptionColor = Accent,
+                    SelectionHighlightColor = Accent,
+                    SelectedColor = Accent,
+                    SelectedFormatTags = Core.Formatting.Bold,
+                    SelectionFormatTags = Core.Formatting.Italic,
+                    NeutralColor = Color.White
+                }
+            };
         }
 
         public static bool Debug = false;
