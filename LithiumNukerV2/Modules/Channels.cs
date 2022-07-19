@@ -15,7 +15,7 @@ using Veylib.ICLI;
 // Nuget
 using Newtonsoft.Json;
 
-namespace LithiumCore
+namespace LithiumNukerV2
 {
     public class Channels
     {

@@ -16,7 +16,7 @@ using Veylib.ICLI;
 using Newtonsoft.Json;
 using System.Diagnostics;
 
-namespace LithiumCore
+namespace LithiumNukerV2
 {
     public class Roles
     {

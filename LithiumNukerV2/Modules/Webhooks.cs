@@ -12,7 +12,7 @@ using LithiumNukerV2;
 using Newtonsoft.Json;
 using Veylib.ICLI;
 
-namespace LithiumCore
+namespace LithiumNukerV2
 {
     public partial class Webhooks
     {

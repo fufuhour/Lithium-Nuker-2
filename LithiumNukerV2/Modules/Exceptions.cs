@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LithiumNukerV2;
 
 
-namespace LithiumCore
+namespace LithiumNukerV2
 {
     public class Exceptions
     {
