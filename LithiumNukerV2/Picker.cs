@@ -65,8 +65,7 @@ namespace LithiumNukerV2
                     break;
             }
 
-            return;
-
+            /*
             // Create versions table
             var vertable = new AsciiTable(new AsciiTable.Properties { Colors = new AsciiTable.ColorProperties { RainbowDividers = true } });
             vertable.AddColumn($"Version - {LithiumShared.GetVersion()}");
@@ -127,6 +126,7 @@ namespace LithiumNukerV2
             }
 
             Debug.WriteLine($"Picker option {ch} finished");
+            */
             //core.Delay(2500);
         }
 
@@ -138,7 +138,7 @@ namespace LithiumNukerV2
             core.Clear();
 
             // Regex format for bot tokens
-            var regex = new Regex(@"[\w-]{24}.[\w-]{6}.[\w-]{27}");
+            var regex = new Regex(@"[\w-_]{24}.[\w-_]{6}.[\w-_]{27}");
 
             string token = Settings.Token;
 
