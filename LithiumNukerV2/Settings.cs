@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 // All of the settings can be changed from here
 
@@ -10,6 +6,11 @@ namespace LithiumNukerV2
 {
     public class Settings
     {
+        public static class Colors
+        {
+            public static readonly Color Accent = Color.FromArgb(146, 13, 255);
+        }
+
         public static bool Debug = false;
         
         public static readonly string Logo = @"
