@@ -84,7 +84,7 @@ namespace LithiumNukerV2
                 MOTD = new Core.StartupMOTDProperties
                 {
                     Text = "fuck skids | verlox & russian heavy on top",
-                    DividerColor = Settings.Colors.Accent,
+                    DividerColor = Settings.Style.Accent,
                 },
                 ColorRotation = 260,
                 LogoString = $"{Settings.Logo}\n{Core.Formatting.HorizontalRainbow(Core.Formatting.Center("made by verlox and russian heavy", 111), 180, 2)}",
@@ -105,7 +105,7 @@ namespace LithiumNukerV2
                     {
                         Style = new ProgressBar.Style
                         {
-                            EdgeColor = Settings.Colors.Accent
+                            EdgeColor = Settings.Style.Accent
                         }
                     }
                 }
