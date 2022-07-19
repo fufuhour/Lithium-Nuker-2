@@ -54,7 +54,6 @@
   <ItemGroup>
     <Compile Include="Modules\Bot.cs" />
     <Compile Include="Modules\Channels.cs" />
-    <Compile Include="Modules\Exceptions.cs" />
     <Compile Include="Modules\Roles.cs" />
     <Compile Include="Modules\Users.cs" />
     <Compile Include="Modules\Webhooks.cs" />
