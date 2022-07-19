@@ -12,6 +12,9 @@ using Newtonsoft.Json;
 
 // Custom
 using Veylib.ICLI;
+using System.Text;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace LithiumNukerV2
 {
@@ -149,7 +152,7 @@ namespace LithiumNukerV2
                 {
                     dynamic conf = JsonConvert.DeserializeObject(File.ReadAllText("config.json"));
 
-                    var menu = new SelectionMenu();
+                    var menu = new SelectionMenu(Settings.Style.SelectionMenuStyle);
 
                     foreach (var t in conf.tokens)
                     {
@@ -159,7 +162,20 @@ namespace LithiumNukerV2
                     }
 
                     core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, "Select a token to use");
-                    menu.Activate();
+
+                    string tokenId = Convert.ToBase64String(Encoding.ASCII.GetBytes(menu.Activate().Split(' ')[0]));
+                  
+                    // I FUCKING HATE THIS CODE
+                    // I literally spent about a half hour on looking for more efficient methods and more simple methods
+                    // C# wanted to be a cunt though.
+                    foreach (string t in conf.tokens)
+                    {
+                        if (t.Contains(tokenId))
+                        {
+                            Settings.Token = t;
+                            break;
+                        }
+                    }
                 } catch (Exception ex)
                 {
                     Debug.Write(ex);
@@ -171,7 +187,7 @@ namespace LithiumNukerV2
 
             // If the token is null, prompt for input
             if (token == null)
-                token = core.ReadLine("Bot token : ");
+                token = core.ReadLine("Bot token $ ");
 
             // See if the token matches the regex pattern
             if (regex.Match(token).Length == 0)
