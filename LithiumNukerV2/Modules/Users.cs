@@ -35,6 +35,29 @@ namespace LithiumNukerV2
             threads = threadCount;
         }
 
+        public dynamic GetUserInfo(object userId)
+        {
+            var req = WebRequest.Create($"https://discord.com/api/v9/users/{userId}");
+            req.Timeout = 5000;
+            req.Headers.Add("Authorization", $"Bot {token}");
+
+            dynamic resp;
+
+            try
+            {
+                var res = req.GetResponse();
+                resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(res.GetResponseStream()).ReadToEnd());
+                res.Close();
+            }
+            catch (WebException ex)
+            {
+                resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
+            }
+
+            core.WriteLine(Color.Lime, $"Got information on {resp.id}");
+
+            return resp;
+        }
 
         public void BanAll(bool banIds = false)
         {
@@ -50,36 +73,14 @@ namespace LithiumNukerV2
             else
                 getMembers();
 
-            whitelistedIds.Add((string)getUserInfo("@me").id);
+            whitelistedIds.Add((string)GetUserInfo("@me").id);
 
             core.WriteLine($"Banning ${members.Count} members");
             banMembers();
 
             #endregion
 
-            dynamic getUserInfo(object userId)
-            {
-                var req = WebRequest.Create($"https://discord.com/api/v9/users/{userId}");
-                req.Timeout = 5000;
-                req.Headers.Add("Authorization", $"Bot {token}");
-
-                dynamic resp;
-
-                try
-                {
-                    var res = req.GetResponse();
-                    resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(res.GetResponseStream()).ReadToEnd());
-                    res.Close();
-                }
-                catch (WebException ex)
-                {
-                    resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
-                }
-
-                core.WriteLine(Color.Lime, $"Got information on {resp.id}");
-
-                return resp;
-            }
+            
 
             void getMembers()
             {
