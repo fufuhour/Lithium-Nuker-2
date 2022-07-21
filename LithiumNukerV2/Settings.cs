@@ -22,6 +22,14 @@ namespace LithiumNukerV2
                     NeutralColor = Color.White
                 }
             };
+            public static readonly ProgressBar.Settings ProgressBarStyle = new ProgressBar.Settings
+            {
+                Style = new ProgressBar.Style
+                {
+                    EdgeColor = Accent,
+                    FillingChar = '#'
+                }
+            };
         }
 
         public static bool Debug = false;
