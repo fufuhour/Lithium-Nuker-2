@@ -10,7 +10,7 @@ using System.Drawing;
 
 using LithiumNukerV2;
 using Newtonsoft.Json;
-using Veylib.CLIUI;
+using Veylib.ICLI;
 
 namespace LithiumCore
 {

@@ -10,12 +10,13 @@ using System.Diagnostics;
 
 // Custom
 using LithiumNukerV2;
-using Veylib.CLIUI;
+using Veylib.ICLI;
+using Veylib;
 
 // Nuget
 using Newtonsoft.Json;
 
-namespace LithiumCore
+namespace LithiumNukerV2
 {
     public class Channels
     {
@@ -282,7 +283,7 @@ namespace LithiumCore
             for (var x =0;x < count; x++)
                 channels.Add(null);
 
-            var loads = WorkController.Seperate(channels, threads);
+            var loads = WorkLoadController.Seperate(channels, threads);
             int finished = 0;
 
             channels.Clear();
@@ -328,7 +329,7 @@ namespace LithiumCore
         {
             // Setup work loads
             var channels = GetAll();
-            var loads = WorkController.Seperate(channels, threads);
+            var loads = WorkLoadController.Seperate(channels, threads);
             var errors = new List<Exception>();
             int finished = 0;
 

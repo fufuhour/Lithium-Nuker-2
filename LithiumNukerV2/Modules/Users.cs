@@ -10,13 +10,14 @@ using System.IO;
 using System.Diagnostics;
 
 // Custom
-using LithiumNukerV2;
-using Veylib.CLIUI;
+
+using Veylib.ICLI;
+using Veylib; 
 
 // Nuget
 using Newtonsoft.Json;
 
-namespace LithiumCore
+namespace LithiumNukerV2
 {
     public class Users
     {
@@ -35,6 +36,30 @@ namespace LithiumCore
             threads = threadCount;
         }
 
+        public static dynamic GetUserInfo(string token, object userId, bool silent = false)
+        {
+            var req = WebRequest.Create($"https://discord.com/api/v9/users/{userId}");
+            req.Timeout = 5000;
+            req.Headers.Add("Authorization", $"Bot {token}");
+
+            dynamic resp;
+
+            try
+            {
+                var res = req.GetResponse();
+                resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(res.GetResponseStream()).ReadToEnd());
+                res.Close();
+            }
+            catch (WebException ex)
+            {
+                resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
+            }
+
+            if (!silent)    
+                core.WriteLine(Color.Lime, $"Got information on {resp.id}");
+
+            return resp;
+        }
 
         public void BanAll(bool banIds = false)
         {
@@ -50,36 +75,14 @@ namespace LithiumCore
             else
                 getMembers();
 
-            whitelistedIds.Add((string)getUserInfo("@me").id);
+            whitelistedIds.Add((string)GetUserInfo(token, "@me").id);
 
             core.WriteLine($"Banning ${members.Count} members");
             banMembers();
 
             #endregion
 
-            dynamic getUserInfo(object userId)
-            {
-                var req = WebRequest.Create($"https://discord.com/api/v9/users/{userId}");
-                req.Timeout = 5000;
-                req.Headers.Add("Authorization", $"Bot {token}");
-
-                dynamic resp;
-
-                try
-                {
-                    var res = req.GetResponse();
-                    resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(res.GetResponseStream()).ReadToEnd());
-                    res.Close();
-                }
-                catch (WebException ex)
-                {
-                    resp = JsonConvert.DeserializeObject<dynamic>(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
-                }
-
-                core.WriteLine(Color.Lime, $"Got information on {resp.id}");
-
-                return resp;
-            }
+            
 
             void getMembers()
             {
@@ -139,7 +142,7 @@ namespace LithiumCore
             void banMembers()
             {
                 int finished = 0;
-                var allLoads = WorkController.Seperate(members, threads);
+                var allLoads = WorkLoadController.Seperate(members, threads);
                 foreach (var load in allLoads)
                 {
                     core.WriteLine($"Banning {load.Count} members in a load");

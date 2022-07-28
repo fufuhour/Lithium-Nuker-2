@@ -7,9 +7,14 @@ using System.IO;
 using System.Net;
 using System.Diagnostics;
 
+// Nuget
+using Newtonsoft.Json;
+
 // Custom
-using Veylib.CLIUI;
-using LithiumCore;
+using Veylib.ICLI;
+using System.Text;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace LithiumNukerV2
 {
@@ -26,6 +31,46 @@ namespace LithiumNukerV2
 
         private static void opts()
         {
+            core.Clear();
+
+            core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, "Choose an option");
+            var option = new SelectionMenu("Webhook spam", "Create/remove channels", "Create/remove roles", "Ban members").Activate();
+
+            switch (option)
+            {
+                case "Webhook spam":
+                    whSpam();
+                    break;
+                case "Create/remove channels":
+                    core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, "Channel mode?");
+                    switch (new SelectionMenu("Create", "Remove").Activate())
+                    {
+                        case "Create":
+                            createChans();
+                            break;
+                        case "Remove":
+                            new Thread(() => { channels.Nuke(); }).Start();
+                            break;
+                    }
+                    break;
+                case "Create/remove roles":
+                    core.WriteLine("Role mode?");
+                    switch (new SelectionMenu("Create", "Remove").Activate())
+                    {
+                        case "Create":
+                            createRoles();
+                            break;
+                        case "Remove":
+                            new Thread(() => { roles.Nuke(); }).Start();
+                            break;
+                    }
+                    break;
+                case "Ban members":
+                    banAll();
+                    break;
+            }
+
+            /*
             // Create versions table
             var vertable = new AsciiTable(new AsciiTable.Properties { Colors = new AsciiTable.ColorProperties { RainbowDividers = true } });
             vertable.AddColumn($"Version - {LithiumShared.GetVersion()}");
@@ -86,6 +131,7 @@ namespace LithiumNukerV2
             }
 
             Debug.WriteLine($"Picker option {ch} finished");
+            */
             //core.Delay(2500);
         }
 
@@ -97,18 +143,56 @@ namespace LithiumNukerV2
             core.Clear();
 
             // Regex format for bot tokens
-            var regex = new Regex(@"[\w-]{24}.[\w-]{6}.[\w-]{27}");
+            var regex = new Regex(@"[\w-_]{24}.[\w-_]{6}.[\w-_]{27}");
+
+            // Find any stored tokens
+            if (File.Exists("config.json"))
+            {
+                try
+                {
+                    dynamic conf = JsonConvert.DeserializeObject(File.ReadAllText("config.json"));
+
+                    var menu = new SelectionMenu(Settings.Style.SelectionMenuStyle);
+
+                    foreach (var t in conf.tokens)
+                    {
+                        var inf = Users.GetUserInfo(t.ToString(), "@me", true);
+
+                        menu.AddOption($"{inf.id} - {inf.username}");
+                    }
+
+                    core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, "Select a token to use");
+
+                    string tokenId = Convert.ToBase64String(Encoding.ASCII.GetBytes(menu.Activate().Split(' ')[0]));
+                  
+                    // I FUCKING HATE THIS CODE
+                    // I literally spent about a half hour on looking for more efficient methods and more simple methods
+                    // C# wanted to be a cunt though.
+                    foreach (string t in conf.tokens)
+                    {
+                        if (t.Contains(tokenId))
+                        {
+                            Settings.Token = t;
+                            break;
+                        }
+                    }
+                } catch (Exception ex)
+                {
+                    Debug.Write(ex);
+                    core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Failed to import ", Color.Pink, "config.json");
+                }
+            }
 
             string token = Settings.Token;
 
             // If the token is null, prompt for input
             if (token == null)
-                token = core.ReadLine("Bot token : ");
+                token = core.ReadLine("Bot token $ ");
 
             // See if the token matches the regex pattern
             if (regex.Match(token).Length == 0)
             {
-                core.WriteLine(Color.Red, "Input does not conform to token format.");
+                core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Input does not conform to token format.");
                 core.Delay(2500);
                 goto EnterToken;
             }
@@ -117,7 +201,7 @@ namespace LithiumNukerV2
                 // Test token
                 if (!bot.TestToken(token))
                 {
-                    core.WriteLine(Color.Red, "Invalid bot token.");
+                    core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Invalid bot token.");
                     core.Delay(2500);
                     goto EnterToken;
                 }
@@ -141,7 +225,7 @@ namespace LithiumNukerV2
     
             if (!success)
             {
-                core.WriteLine(Color.Red, "Guild ID couldn't be parsed.");
+                core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Guild ID couldn't be parsed.");
                 core.Delay(2500);
                 goto EnterGuildId;
             } else
@@ -149,7 +233,7 @@ namespace LithiumNukerV2
                 // Check if its in the guild, if not, write out
                 if (!bot.IsInGuild(Settings.Token, gid))
                 {
-                    core.WriteLine(Color.Red, "Bot is not in guild.");
+                    core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Bot is not in guild.");
                     core.Delay(2500);
                     goto EnterGuildId;
                 }
@@ -182,7 +266,7 @@ namespace LithiumNukerV2
             // Check if conversion was successful
             if (!succ)
             {
-                core.WriteLine(Color.Red, "Failed to parse amount of messages to an int");
+                core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Failed to parse amount of messages to an int");
                 core.Delay(5000);
                 opts();
                 return;
@@ -211,7 +295,7 @@ namespace LithiumNukerV2
 
             if (!succ)
             {
-                core.WriteLine(Color.Red, "Failed to parse amount to an int");
+                core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Failed to parse amount to an int");
                 core.Delay(5000);
                 opts();
                 return;
@@ -224,7 +308,7 @@ namespace LithiumNukerV2
             // Validate input
             if (type.ToLower() != "text" && type.ToLower() != "voice")
             {
-                core.WriteLine(Color.Red, "Invalid channel type");
+                core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Invalid channel type");
                 core.Delay(5000);
                 opts();
                 return;
@@ -247,7 +331,7 @@ namespace LithiumNukerV2
 
             if (!succ)
             {
-                core.WriteLine(Color.Red, "Failed to parse amount to an int");
+                core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Failed to parse amount to an int");
                 return;
             }
 
