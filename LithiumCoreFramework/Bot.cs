@@ -3,12 +3,12 @@ using System;
 using System.Net;
 
 // Custom
-
+using LithiumNukerV2;
 
 // Nuget
 using Newtonsoft.Json;
 
-namespace LithiumNukerV2
+namespace LithiumCore
 {
     public class Bot
     {

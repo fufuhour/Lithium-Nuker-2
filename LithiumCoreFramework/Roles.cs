@@ -9,15 +9,14 @@ using System.IO;
 using System.Drawing;
 
 // Custom
-
-using Veylib.ICLI;
-using Veylib;
+using LithiumNukerV2;
+using Veylib.CLIUI;
 
 // Nuget
 using Newtonsoft.Json;
 using System.Diagnostics;
 
-namespace LithiumNukerV2
+namespace LithiumCore
 {
     public class Roles
     {
@@ -210,7 +209,7 @@ namespace LithiumNukerV2
             for (var x = 0; x < count; x++)
                 roles.Add(null);
 
-            var loads = WorkLoadController.Seperate(roles, threads);
+            var loads = WorkController.Seperate(roles, threads);
 
             int created = 0;
             int finished = 0;
@@ -254,7 +253,7 @@ namespace LithiumNukerV2
         {
             // Setup work loads
             var roles = GetAll();
-            var loads = WorkLoadController.Seperate(roles, threads);
+            var loads = WorkController.Seperate(roles, threads);
             var errors = new List<Exception>();
             int finished = 0;
 

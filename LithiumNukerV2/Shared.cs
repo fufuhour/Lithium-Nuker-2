@@ -9,7 +9,7 @@ using System.Drawing;
 
 // Custom
 using Veylib;
-using Veylib.ICLI;
+using Veylib.CLIUI;
 using Veylib.Authentication;
 
 // Nuget
