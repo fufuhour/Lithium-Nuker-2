@@ -87,7 +87,11 @@ namespace LithiumNukerV2
                     DividerColor = Settings.Style.Accent,
                 },
                 ColorRotation = 260,
-                LogoString = $"{Settings.Logo}\n{Core.Formatting.HorizontalRainbow(Core.Formatting.Center("made by verlox and russian heavy", 111), 180, 2)}",
+                Logo = new Core.StartupLogoProperties
+                {
+                    Text = $"{Settings.Logo}\n{Core.Formatting.HorizontalRainbow(Core.Formatting.Center("made by verlox and russian heavy", 111), 180, 2)}",
+                    AutoCenter = true,
+                },
                 //LogoString = $"{Settings.Logo}",
                 DebugMode = Settings.Debug,
                 //Author = new Core.StartupAuthorProperties {
