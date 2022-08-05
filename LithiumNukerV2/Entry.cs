@@ -10,6 +10,7 @@ using Microsoft.Win32;
 
 // Custom
 using Veylib.ICLI;
+using Veylib.Utilities;
 
 /*
  * Nuking com is shit
@@ -131,8 +132,37 @@ namespace LithiumNukerV2
             ServicePointManager.DefaultConnectionLimit = Settings.ConnectionLimit;
             ServicePointManager.Expect100Continue = false;
 
-            // Open options
-             Picker.Choose();
+            var updater = new AutoUpdater();
+            updater.CurrentSettings.Mode = AutoUpdater.Settings.UpdateMode.Update;
+            updater.CurrentSettings.CurrentVersion = core.GetAutoVersion();
+            updater.CurrentSettings.LatestVersionUri = new Uri("https://pastebin.com/raw/hpnq3itV");
+            updater.CurrentSettings.AutoRestart = false;
+            updater.CurrentSettings.Github.Enabled = true;
+            updater.CurrentSettings.Github.Username = "verlox";
+            updater.CurrentSettings.Github.Repo = "Lithium-Nuker-2";
+            updater.CurrentSettings.Github.AssetNameContains = "LithiumNukerV2";
+            updater.CurrentSettings.Github.FileNameContains = "LithiumNukerV2";
+
+            AutoUpdater.UpdateAvailable += (_, args2) =>
+            {
+                Debug.WriteLine(((AutoUpdater.UpdateEventArgs)args2).Message);
+            };
+
+            AutoUpdater.UpdateFailed += (_, args2) =>
+            {
+                Debug.WriteLine(((AutoUpdater.UpdateEventArgs)args2).Exception);
+            };
+
+            AutoUpdater.RestartRequired += (_, _2) =>
+            {
+                Debug.WriteLine("close application to finish update");
+            };
+
+            if (!updater.Check())
+            {
+                // Open options
+                Picker.Choose();
+            }
         }
     }
 }
