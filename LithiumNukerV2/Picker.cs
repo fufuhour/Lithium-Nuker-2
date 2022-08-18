@@ -135,6 +135,11 @@ namespace LithiumNukerV2
             //core.Delay(2500);
         }
 
+        private static void addToken(string token)
+        {
+            Settings.Token = token;
+        }
+
         public static void Choose()
         {
             EnterToken:
@@ -161,19 +166,29 @@ namespace LithiumNukerV2
                         menu.AddOption($"{inf.id} - {inf.username}");
                     }
 
+                    menu.AddOption("Add a new token");
+
                     core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, "Select a token to use");
 
-                    string tokenId = Convert.ToBase64String(Encoding.ASCII.GetBytes(menu.Activate().Split(' ')[0]));
-                  
-                    // I FUCKING HATE THIS CODE
-                    // I literally spent about a half hour on looking for more efficient methods and more simple methods
-                    // C# wanted to be a cunt though.
-                    foreach (string t in conf.tokens)
+                    var opt = menu.Activate();
+
+                    if (opt == "Add a new token")
                     {
-                        if (t.Contains(tokenId))
+                        addToken(core.ReadLine("Bot Token $ "));
+                    } else
+                    {
+                        string tokenId = Convert.ToBase64String(Encoding.ASCII.GetBytes(opt.Split(' ')[0]));
+                  
+                        // I FUCKING HATE THIS CODE
+                        // I literally spent about a half hour on looking for more efficient methods and more simple methods
+                        // C# wanted to be a cunt though.
+                        foreach (string t in conf.tokens)
                         {
-                            Settings.Token = t;
-                            break;
+                            if (t.Contains(tokenId))
+                            {
+                                Settings.Token = t;
+                                break;
+                            }
                         }
                     }
                 } catch (Exception ex)
@@ -219,7 +234,7 @@ namespace LithiumNukerV2
 
             // Try to parse the input as a long
             if (!success)
-                success = long.TryParse(core.ReadLine("Guild ID : "), out gid);
+                success = long.TryParse(core.ReadLine("Guild ID $ "), out gid);
             else
                 gid = (long)Settings.GuildId;
     
