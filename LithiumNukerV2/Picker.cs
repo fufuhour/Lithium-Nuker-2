@@ -151,6 +151,7 @@ namespace LithiumNukerV2
             var regex = new Regex(@"[\w-_]{24}.[\w-_]{6}.[\w-_]{27}");
 
             // Find any stored tokens
+            bool skipEnter = false;
             if (File.Exists("config.json"))
             {
                 try
@@ -169,10 +170,25 @@ namespace LithiumNukerV2
                     menu.AddOption("Add a new token");
 
                     core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, "Select a token to use");
+                    menu.AddOption("Add a new token");
 
                     var opt = menu.Activate();
 
                     if (opt == "Add a new token")
+<<<<<<< HEAD
+=======
+                    {
+                        skipEnter = true;
+                        goto TInput;
+                    }
+
+                    string tokenId = Convert.ToBase64String(Encoding.ASCII.GetBytes(opt.Split(' ')[0]));
+                  
+                    // I FUCKING HATE THIS CODE
+                    // I literally spent about a half hour on looking for more efficient methods and more simple methods
+                    // C# wanted to be a cunt though.
+                    foreach (string t in conf.tokens)
+>>>>>>> 2458d1f06c482a24add49f137141e992b93e3bcc
                     {
                         addToken(core.ReadLine("Bot Token $ "));
                     } else
@@ -198,6 +214,8 @@ namespace LithiumNukerV2
                 }
             }
 
+            TInput:
+
             string token = Settings.Token;
 
             // If the token is null, prompt for input
@@ -209,7 +227,11 @@ namespace LithiumNukerV2
             {
                 core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Input does not conform to token format.");
                 core.Delay(2500);
-                goto EnterToken;
+
+                if (skipEnter)
+                    goto TInput;
+                else
+                    goto EnterToken;
             }
             else
             {
@@ -218,7 +240,11 @@ namespace LithiumNukerV2
                 {
                     core.WriteLine(new Core.MessageProperties { Time = null, Label = null }, Color.Red, "Invalid bot token.");
                     core.Delay(2500);
-                    goto EnterToken;
+
+                    if (skipEnter)
+                        goto TInput;
+                    else
+                        goto EnterToken;
                 }
                 else
                     Settings.Token = token;
