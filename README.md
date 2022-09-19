@@ -6,6 +6,9 @@
 ## Installation
 Go to the `master` branch [here](https://github.com/verlox/Lithium-Nuker-2/tree/master)
 
+## Warning
+There are known compatibility issues with **Windows Terminal**. Please use native **Command Prompt**. I have not found any fixes, as it has to do with how console C# interacts with Windows Terminal.
+
 ## Support
 * [Discord](https://discord.gg/arsenic)
 
